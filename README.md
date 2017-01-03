@@ -356,6 +356,25 @@ If you already have a Parse application with defined schemas and collections, yo
   Song.all(artist: artist)
 ```
 
+You can always combine both approaches by defining special attributes before you auto generate your models:
+
+```ruby
+  # create a Song class, but only create the artist array pointer association.
+  class Song < Parse::Object
+    has_many :artists, through: :array
+  end
+
+  # Now let Parse Stack generate the rest of the properties and associations
+  # based on your remote schema. Assume there is a `title` field for the `Song`
+  # collection.
+  Parse.auto_generate_models!
+
+  song = Song.first
+  song.artists # created with our definition above
+  song.title # auto-generated property
+
+```
+
 ## Parse Config
 Getting your configuration variables once you have a default client setup can be done with `Parse.config`. The first time this method is called, Parse-Stack will get the configuration from Parse Server, and cache it. To force a reload of the config, use `config!`. You
 
